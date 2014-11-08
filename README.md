@@ -1,6 +1,8 @@
 NRMA Digical Command Control (DCC) implementation for Raspberry Pi
 ==================================================================
 
+**WORK IN PROGRESS IT DOES NOT WORK YET**
+
 This module allows to use a minimal subset of the DCC protocol to
 control DCC-compatible devices, usually model trains, using the 
 Raspberry PI GPIO interface.
