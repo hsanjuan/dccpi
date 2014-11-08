@@ -21,7 +21,23 @@ class DCCGeneralPacket(object):
         for byte in self.data_bytes:
             assert(len(byte) == 8)
 
-    def pack(self):
+    @staticmethod
+    def from_bit_array(int_array):
+        """
+        Given [1, 1,...] array try to decode a packet
+        """
+        packet = BitArray(int_array)
+        preamble = packet[0:12]
+        address_byte = packet[13:21]
+        data_bytes   = packet[22:-1]
+        dbit = 0
+        data_bytes_a = []
+        while dbit < len(data_bytes):
+            data_bytes_a.append(data_bytes[dbit:dbit+8])
+            dbit += 9 # skip start bit from next data byte
+        return DCCGeneralPacket(address_byte, data_bytes_a)
+
+    def to_bit_array(self):
         """
         Builds a single string that should end up
         being serialized.
@@ -36,4 +52,23 @@ class DCCGeneralPacket(object):
             packet.append(self.data_byte_start_bit)
             packet.append(byte)
         packet.append(self.packet_end_bit)
-        return map(bool, packet)
+        return map(int, packet)
+
+    def __str__(self):
+        """
+        Allow some debuging
+        """
+        if len(self.data_bytes) > 2:
+            return "Device #%d: %s" % (self.address_byte.uint,
+                                       " ".join(map(str,self.data_bytes)))
+        else:  # Assume this is a baseline packet
+            string = "Device #%d: Dir->%d, HL->%d, Speed->%d"
+            instruction = self.data_bytes[0]
+            direction = instruction[2:3].uint
+            headlight = instruction[3:4].uint
+            speed = instruction[4:8].uint
+            return string % (self.address_byte.uint,
+                             direction, headlight, speed)
+
+        
+        
