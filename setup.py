@@ -17,7 +17,7 @@ setup(
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: "GNU General Public License v3 (GPLv3)
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
         "Development Status :: 1 - Alpha",
         "Environment :: Plugins",
         "Intended Audience :: Developers",
@@ -28,5 +28,5 @@ setup(
         "Topic :: System :: Networking",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-    long_description = read('README.md')
+    long_description = open('README.md').read()
 )
