@@ -12,14 +12,14 @@ It is based on the:
 Example with dummy encoder
 --------------------------
 
-    import dccpi
+    from dccpi import *
 
     controller = DCCController(DCCDummyEncoder())
     loco1 = DCCLocomotive(name="my loco", address=3, speed=0)
     controller.register(loco1)
     controller.start()
     # The encoder sends the packets on a different thread
-    loco.faster()
+    loco1.faster()
     # ...
-    loco.stop()
+    loco1.stop()
     controller.stop()

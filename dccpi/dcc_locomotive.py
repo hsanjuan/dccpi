@@ -25,32 +25,29 @@ class DCCLocomotive(object):
     def reverse(self):
         self.direction = 0 if (self.direction) else 1
 
-    def headlight_on(self):
+    def turn_headlight_on(self):
         self.headlight_on = True
 
-    def headlight_off(self):
+    def turn_headlight_off(self):
         self.headlight_on = False
 
-    def headlight_switch(self):
+    def switch_headlight(self):
         self.headlight = False if (self.headlight) else True
-
-    def speed(self, speed):
-        self.speed = speed
 
     def slower(self):
         # Skip emergency stop
         if self.speed is 2:
-            self._set_speed(0)
+            self.set_speed(0)
         else:
-            self._set_speed(self.speed - 1)
+            self.set_speed(self.speed - 1)
 
     def faster(self):
         if self.speed is 0:
-            self._set_speed(2)
+            self.set_speed(2)
         else:
-            self._set_speed(self.speed + 1)
+            self.set_speed(self.speed + 1)
 
-    def _set_speed(self, speed):
+    def set_speed(self, speed):
         # Make some basic checks
         speed = abs(speed)
         if self.headlight_support:
