@@ -35,7 +35,7 @@ class DCCLocomotive(object):
         self.headlight_on = False
 
     def switch_headlight(self):
-        self.headlight = False if (self.headlight) else True
+        self.headlight_on = False if (self.headlight_on) else True
 
     def slower(self):
         # Skip emergency stop
