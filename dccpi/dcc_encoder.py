@@ -23,7 +23,7 @@ class DCCEncoder(object):
         self.bit_one_part_max_duration = bit_one_part_max_duration
         self.bit_one_part_duration = bit_one_part_duration
         self.bit_zero_part_min_duration = bit_zero_part_min_duration
-        self.bit_zero_part_max_duraction = bit_zero_part_max_duraction
+        self.bit_zero_part_max_duration = bit_zero_part_max_duration
         self.bit_zero_part_duration = bit_zero_part_duration
 
     def send_packet(self, packet, times):
