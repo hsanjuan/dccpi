@@ -26,7 +26,6 @@ setup(
         "Development Status :: 1 - Planning",
         "Environment :: Plugins",
         "Intended Audience :: Developers",
-        "Operating System :: Linux",
         "Natural Language :: English",
         "Operating System :: POSIX :: Linux",
         "Software Development :: Embedded Systems",
