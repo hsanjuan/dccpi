@@ -12,11 +12,12 @@ class DCCLocomotive(object):
                  headlight_on=False,
                  headlight_support=True):
         self.name = name
-        self.set_speed(speed)
         self.address = address
         self.direction = direction
         self.headlight_on = headlight_on,
         self.headlight_support = headlight_support
+
+        self.set_speed(speed)
 
     def emergency_stop(self):
         self.speed = 1
