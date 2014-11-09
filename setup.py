@@ -28,7 +28,6 @@ setup(
         "Intended Audience :: Developers",
         "Natural Language :: English",
         "Operating System :: POSIX :: Linux",
-        "Software Development :: Embedded Systems",
         "Topic :: System :: Networking",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
