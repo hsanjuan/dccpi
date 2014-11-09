@@ -12,7 +12,7 @@ class DCCLocomotive(object):
                  headlight_on=False,
                  headlight_support=True):
         self.name = name
-        self.speed = speed
+        self.set_speed(speed)
         self.address = address
         self.direction = direction
         self.headlight_on = headlight_on,

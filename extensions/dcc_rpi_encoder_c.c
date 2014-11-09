@@ -5,6 +5,7 @@ extern void delayMicrosecondsHard (unsigned int howLong);
 
 static PyObject * dcc_rpi_encoder_c_send_bit_array(PyObject *self, PyObject *args){
     const char *bit_array;
+    char bit_array_pos;
     const int count;
     const unsigned int bit_one_part_duration;
     const unsigned int bit_zero_part_duration;
@@ -16,8 +17,9 @@ static PyObject * dcc_rpi_encoder_c_send_bit_array(PyObject *self, PyObject *arg
         return NULL;
 
     for (i = 0; i < count; i++){
-        while (*bit_array){
-            if (*bit_array++ == '0'){
+        bit_array_pos = *bit_array;
+        while (bit_array_pos){ //string will be null terminated
+            if (bit_array_pos++ == '0'){
                 //Encode 0 with 100us for each part
                 digitalWrite(0, LOW);
                 delayMicrosecondsHard(bit_zero_part_duration);
