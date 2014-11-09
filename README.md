@@ -27,6 +27,7 @@ Software requirements
 ---------------------
 
   * wiringPi: download and install [wiringPi](http://wiringpi.com/download-and-install/)
+  * Since wiringPi uses low-level mechanisms to access pins, dccpi programs **must be run as root**
 
 Installation
 ------------
@@ -47,6 +48,8 @@ There are 3 main componenents:
   * `DCCLocomotive`: represents a locomotive (device equipped with a DCC decoder). We can set speed, status of lights etc.
   * `DCCController`: represents the command station, that can be turned on/off. When it's on, it sends packets using a DCCEncoder.
   * `DCCRPiEncoder`: it implements methods to actually send packets. The RPi encoder uses a c-extension to do it. It should be easy to add other encoders (for example to different platforms than the RPi).
+
+The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) onBCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0.
 
 See example below and read the code for more info.
 
