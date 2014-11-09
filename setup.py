@@ -23,7 +23,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Development Status :: 1 - Alpha",
+        "Development Status :: 1 - Planning",
         "Environment :: Plugins",
         "Intended Audience :: Developers",
         "Operating System :: Linux",
