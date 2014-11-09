@@ -1,3 +1,5 @@
+from dcc_baseline_packet_factory import DCCBaselinePacketFactory
+
 class DCCLocomotive(object):
     """
     A locomotive is a thing with speed, direction and lights
@@ -55,3 +57,10 @@ class DCCLocomotive(object):
         else:
             self.speed = min(31, speed)
     
+    def control_packet(self):
+        factory = DCCBaselinePacketFactory
+        return factory.speed_and_direction_packet(self.address,
+                                                  self.speed,
+                                                  self.headlight_on,
+                                                  self.direction,
+                                                  self.headlight_support)

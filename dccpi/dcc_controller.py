@@ -1,25 +1,23 @@
-from dcc_baseline_packet_factory import DCCBaselinePacketFactory
 import threading
+from dcc_baseline_packet_factory import DCCBaselinePacketFactory
 
 class DCCController(object):
     """
-    A DCC controller is used to send DCC packets to the tracks.
+    A DCC controller take care of generating the packages and sending
+    them using a DCCEncoder of choice.
 
-    It works by registering locos and then it will continously send
-    packets addressed to the registered locos using a separate thread.
-
+    It allows to register DCCLocomotives and runs a separate thread
+    to send them packages.
     """
 
-    def __init__(self,
-                 dcc_encoder):
+    def __init__(self, dcc_encoder):
         """
-        dcc_encoder is the class that sends the signals to the track
-        given a package
+        Initialize the controller. We need to have an encoder instance for that"
         """
         self.dcc_encoder = dcc_encoder
         self.state = 'idle'
         self.devices = {}
-        self._thread  = DCCControllerThread(self)
+        self._thread  = None
 
     def register(self, dcc_device):
         self.devices[dcc_device.name] = dcc_device
@@ -31,12 +29,17 @@ class DCCController(object):
             del self.devices[dcc_device.name]
 
     def start(self):
+        if self._thread:
+            print("Controller already running")
+            return None
+        self._thread  = DCCControllerThread(self)
         self.state = 'startup'
         self._thread.start()
 
     def stop(self):
         self.state = 'shutdown'
         self._thread.join()
+        self._thread  = None
 
 
 class DCCControllerThread(threading.Thread):
@@ -44,7 +47,6 @@ class DCCControllerThread(threading.Thread):
     Runs the thread.
 
     It uses a small state machine to control state:
-    Idle -> Startup -> Run -> Shutdown -> Idle
       * Startup: broadcast reset packet
       * Run: send packets to devices
       * Shutdown: broadcast stop packet
@@ -75,14 +77,8 @@ class DCCControllerThread(threading.Thread):
                 break
             elif state is 'run':
                 packets = []
-                factory = DCCBaselinePacketFactory
                 for name,device in self.dcc_controller.devices.iteritems():
-                    p = factory.speed_and_direction_packet(device.address,
-                                                           device.speed,
-                                                           device.headlight_on,
-                                                           device.direction,
-                                                           device.headlight_support)
-                    packets.append(p)
+                    packets.append(device.control_packet())
                 self.dcc_encoder.send_packets(packets, 10)
             else:
                 print "unknown state"

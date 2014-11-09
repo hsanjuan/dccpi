@@ -54,6 +54,10 @@ class DCCGeneralPacket(object):
         packet.append(self.packet_end_bit)
         return map(int, packet)
 
+    def to_bit_string(self):
+        string = ""
+        return "".join(map(str, self.to_bit_array()))
+
     def __str__(self):
         """
         Allow some debuging

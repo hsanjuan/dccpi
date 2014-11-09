@@ -1,4 +1,4 @@
-from distutils.core import setup
+from distutils.core import setup, Extension
 setup(
     name = "dccpi",
     packages = ["dccpi"],
@@ -12,7 +12,12 @@ setup(
     keywords = ["dcc", "nmra", "pi", "raspberry", "modelling",
                 "train", "decoder" ],
     install_requires=[
-        'bitarray',
+        'bitstring',
+    ],
+    ext_modules=[
+        Extension('dcc_rpi_encoder_c',
+                  sources = ['extensions/dcc_rpi_encoder_c.c'],
+                  libraries = ['wiringPi'])
     ],
     classifiers = [
         "Programming Language :: Python",

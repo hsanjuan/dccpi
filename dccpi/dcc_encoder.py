@@ -1,4 +1,5 @@
 import operator
+import sys
 
 class DCCEncoder(object):
     """
@@ -26,17 +27,11 @@ class DCCEncoder(object):
         self.bit_zero_part_duration = bit_zero_part_duration
 
     def send_packet(self, packet, times):
-        return self.send_bit_array(packet.to_bit_array(), times)
+        # to be implemented by subclass
+        sys.stderr.write("send_packet() not implemented!")
+        return False
 
     def send_packets(self, packets, times):
-        return self.send_bit_arrays(map(operator.methodcaller('to_bit_array'), 
-                                        packets), times)
-
-    def send_bit_array(self, bitarray, times):
         # to be implemented by subclass
+        sys.stderr.write("send_packets() not implemented!")
         return False
-
-    def send_bit_arrays(self, bitarray_array, times):
-        # to be implemented by subclass
-        return False
-    
