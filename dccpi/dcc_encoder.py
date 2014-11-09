@@ -17,7 +17,7 @@ class DCCEncoder(object):
                  bit_one_part_max_duration=61,
                  bit_one_part_duration=58,
                  bit_zero_part_min_duration=95,
-                 bit_zero_part_max_duraction=9900,
+                 bit_zero_part_max_duration=9900,
                  bit_zero_part_duration=100):
         self.bit_one_part_min_duration = bit_one_part_min_duration
         self.bit_one_part_max_duration = bit_one_part_max_duration

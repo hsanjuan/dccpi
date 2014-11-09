@@ -7,8 +7,20 @@ class DCCRPiEncoder(DCCEncoder):
     Uses a C extension to send the packets quickly.
     """
 
-    def __init__(self):
-        DCCEncoder.__init__(self)
+    def __init__(self,
+                 bit_one_part_min_duration=55, #microseconds
+                 bit_one_part_max_duration=61,
+                 bit_one_part_duration=58,
+                 bit_zero_part_min_duration=95,
+                 bit_zero_part_max_duration=9900,
+                 bit_zero_part_duration=100):
+        DCCEncoder.__init__(self,
+                            bit_one_part_min_duration,
+                            bit_one_part_max_duration,
+                            bit_one_part_duration,
+                            bit_zero_part_min_duration,
+                            bit_zero_part_max_duraction,
+                            bit_zero_part_duration)
 
     def send_packet(self, packet, times):
         packet_string = packet.to_bit_string()
