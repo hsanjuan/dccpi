@@ -2,7 +2,7 @@ from distutils.core import setup, Extension
 setup(
     name = "dccpi",
     packages = ["dccpi"],
-    version = "0.0.1",
+    version = "1.0.0",
     description = "A Python NMRA DCC protocol implementation for RaspberryPi",
     author = "Hector Sanjuan",
     author_email = "hector@convivencial.org",
@@ -23,7 +23,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Development Status :: 1 - Planning",
+        "Development Status :: 4 - Beta",
         "Environment :: Plugins",
         "Intended Audience :: Developers",
         "Natural Language :: English",

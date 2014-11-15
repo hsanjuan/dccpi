@@ -1,11 +1,9 @@
 NRMA Digical Command Control (DCC) implementation for Raspberry Pi
 ==================================================================
 
-*Development status: alpha, unstable, unstested.*
+This module implements the DCC protocol for controlling model trains using a Raspberry Pi.
 
-This module implements the DCC protocol for controlling model trains using a RaspberryPi.
-
-It is able to output direction and speed DCC-encoded packets on one of the GPIO pins (see example below) by using a small wiringPi-based C extension.
+It is able to output direction and speed DCC-encoded packets on one of the GPIO pins (see example below).
 
 It is based on the:
   * [S-91 Electrical Standard](http://www.nmra.org/sites/default/files/standards/sandrp/pdf/s-9.1_electrical_standards_2006.pdf)
@@ -17,11 +15,17 @@ Features
   * Control DCC locomotives using Python
   * Set speed, direction and lights
 
+Note dccpi does not yet implement any advanced features like decoder registry operations (i.e. set address).
+
 Hardware requirements
 ---------------------
 
   * A Raspberry Pi (developed/tested on model B+)
   * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks (working on that).
+  * DCC-decoder-equipped locomotives and tracks.
+
+`dccpi` should work on any common scale. DCC decoders take a wide range of voltage outputs (up to 24v). This has been tested on N-scale
+with a 18v booster circuit.
 
 Software requirements
 ---------------------
@@ -47,9 +51,9 @@ There are 3 main componenents:
 
   * `DCCLocomotive`: represents a locomotive (device equipped with a DCC decoder). We can set speed, status of lights etc.
   * `DCCController`: represents the command station, that can be turned on/off. When it's on, it sends packets using a DCCEncoder.
-  * `DCCRPiEncoder`: it implements methods to actually send packets. The RPi encoder uses a c-extension to do it. It should be easy to add other encoders (for example to different platforms than the RPi).
+  * `DCCRPiEncoder`: it implements methods to actually send packets. The RPi encoder uses a c-extension based on WiringPi to do it. It should be easy to add other encoders (for example for different platforms than the RPi).
 
-The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) onBCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0.
+The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) on BCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0.
 
 See example below and read the code for more info.
 
