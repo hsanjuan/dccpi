@@ -80,3 +80,8 @@ Example with dummy encoder
 --------------------------
 
 Same as above but pass `DCCDummyEncoder()` to the controller. The Dummy Encoder will print information to the screen every 10 seconds on what packages are sent and to who, but leave GPIO outputs alone.
+
+License
+-------
+
+GPLv3. See `LICENSE`.

@@ -1,5 +1,25 @@
+"""
+    Copyright (C) 2014  Hector Sanjuan
+
+    This file is part of "dccpi".
+
+    "dccpi" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    "dccpi" is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import threading
 from dcc_baseline_packet_factory import DCCBaselinePacketFactory
+
 
 class DCCController(object):
     """
@@ -12,12 +32,12 @@ class DCCController(object):
 
     def __init__(self, dcc_encoder):
         """
-        Initialize the controller. We need to have an encoder instance for that"
+        Initialize the controller. We need to have an encoder instance for that
         """
         self.dcc_encoder = dcc_encoder
         self.state = 'idle'
         self.devices = {}
-        self._thread  = None
+        self._thread = None
 
     def register(self, dcc_device):
         self.devices[dcc_device.name] = dcc_device
@@ -32,14 +52,14 @@ class DCCController(object):
         if self._thread:
             print("Controller already running")
             return None
-        self._thread  = DCCControllerThread(self)
+        self._thread = DCCControllerThread(self)
         self.state = 'startup'
         self._thread.start()
 
     def stop(self):
         self.state = 'shutdown'
         self._thread.join()
-        self._thread  = None
+        self._thread = None
 
 
 class DCCControllerThread(threading.Thread):
@@ -77,7 +97,7 @@ class DCCControllerThread(threading.Thread):
                 break
             elif state is 'run':
                 packets = []
-                for name,device in self.dcc_controller.devices.iteritems():
+                for name, device in self.dcc_controller.devices.iteritems():
                     packets.append(device.control_packet())
                 self.dcc_encoder.send_packets(packets, 10)
             else:

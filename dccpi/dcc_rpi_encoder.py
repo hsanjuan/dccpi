@@ -1,6 +1,26 @@
+"""
+    Copyright (C) 2014  Hector Sanjuan
+
+    This file is part of "dccpi".
+
+    "dccpi" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    "dccpi" is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 from dcc_encoder import DCCEncoder
 import dcc_rpi_encoder_c
 import operator
+
 
 class DCCRPiEncoder(DCCEncoder):
     """
@@ -8,7 +28,7 @@ class DCCRPiEncoder(DCCEncoder):
     """
 
     def __init__(self,
-                 bit_one_part_min_duration=55, #microseconds
+                 bit_one_part_min_duration=55,  # microseconds
                  bit_one_part_max_duration=61,
                  bit_one_part_duration=58,
                  bit_zero_part_min_duration=95,
@@ -27,7 +47,8 @@ class DCCRPiEncoder(DCCEncoder):
         return self.send_bit_string(packet_string, times)
 
     def send_packets(self, packets, times):
-        packet_string = "".join(map(operator.methodcaller('to_bit_string'), packets))
+        packet_string = "".join(map(operator.methodcaller('to_bit_string'),
+                                    packets))
         return self.send_bit_string(packet_string, times)
 
     def send_bit_string(self, bit_string, times):

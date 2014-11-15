@@ -1,6 +1,25 @@
+"""
+    Copyright (C) 2014  Hector Sanjuan
+
+    This file is part of "dccpi".
+
+    "dccpi" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    "dccpi" is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 from dcc_encoder import DCCEncoder
-from dcc_general_packet import DCCGeneralPacket
 import time
+
 
 class DCCDummyEncoder(DCCEncoder):
     """
@@ -10,7 +29,7 @@ class DCCDummyEncoder(DCCEncoder):
     10 secs between packets batch
     """
 
-    SLEEP_BETWEEN_BATCHES=10
+    SLEEP_BETWEEN_BATCHES = 10
 
     def __init__(self):
         DCCEncoder.__init__(self)

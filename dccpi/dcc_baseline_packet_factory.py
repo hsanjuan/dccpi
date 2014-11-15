@@ -1,5 +1,25 @@
+"""
+    Copyright (C) 2014  Hector Sanjuan
+
+    This file is part of "dccpi".
+
+    "dccpi" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    "dccpi" is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 from bitstring import BitArray
 from dcc_general_packet import DCCGeneralPacket
+
 
 class DCCBaselinePacketFactory:
     """
@@ -21,7 +41,8 @@ class DCCBaselinePacketFactory:
             * 2 - Emergency-Stop
             * 3 - Emergency-Stop (I) (headlights disabled)
             * 4..31 - Step 1..Step 28 or 1-14
-        param headlight_on bool decides if headlight is turned on when supported
+        param headlight_on bool decides if headlight is turned on when
+              supported
         param direction int is 1 for forward and 0 for backwards.
         param headlight_support decides if we use 16 or 32 speed steps
         """
@@ -46,7 +67,7 @@ class DCCBaselinePacketFactory:
 
         error = address_bin ^ instruction_bin
 
-        data = [ instruction_bin, error ]
+        data = [instruction_bin, error]
         return DCCGeneralPacket(address_bin, data)
 
     @staticmethod
@@ -85,7 +106,7 @@ class DCCBaselinePacketFactory:
 
         param direction sets the direction bit in the packet.
         param soft_stop indicates if the decoder bring the locomotive to stop
-                        or stop delivering energy to the engine (guess in 
+                        or stop delivering energy to the engine (guess in
                         the first case it may gradually decelerate it)
         param ignore_direction allows optionally ignoring the direction bit
                                for all direction sensitive functions
