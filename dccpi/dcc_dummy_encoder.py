@@ -40,9 +40,11 @@ class DCCDummyEncoder(DCCEncoder):
         time.sleep(self.SLEEP_BETWEEN_BATCHES)
         return True
 
-    def send_packets(self, packets, times):
+    def send_payload(self, times):
+        if not len(self.payload):
+            return False
         print "----"
-        for p in packets:
+        for p in self.payload:
             print p
         print "---- (%d times...)" % times
         time.sleep(self.SLEEP_BETWEEN_BATCHES)

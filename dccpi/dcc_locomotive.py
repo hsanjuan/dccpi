@@ -32,27 +32,69 @@ class DCCLocomotive(object):
                  headlight_on=False,
                  headlight_support=True):
         self.name = name
-        self.address = address
+        self._address = address
         self.direction = direction
-        self.headlight_on = headlight_on,
+        self._headlight_on = headlight_on,
         self.headlight_support = headlight_support
 
-        self.set_speed(speed)
+        # We need a way to tell controller to update the payload
+        # everytime we modify something
+        # This will be set by the controller
+        self.notify_update_callback = None
+
+        self.speed = speed
 
     def emergency_stop(self):
         self.speed = 1
+        self._notify_update()
 
     def stop(self):
         self.speed = 0
+        self._notify_update()
 
     def reverse(self):
         self.direction = 0 if (self.direction) else 1
+        self._notify_update()
+
+    @property
+    def speed(self):
+        return self._speed
+
+    @speed.setter
+    def speed(self, speed):
+        # Make some basic checks
+        speed = abs(speed)
+        if self.headlight_support:
+            self._speed = min(15, speed)
+        else:
+            self._speed = min(31, speed)
+        self._notify_update()
+
+    @property
+    def headlight_on(self):
+        return self._headlight_on
+
+    @headlight_on.setter
+    def headlight_on(self, x):
+        self._headlight_on = x
+        self._notify_update()
+
+    @property
+    def address(self):
+        return self._address
+
+    @address.setter
+    def address(self, ad):
+        self._address = ad
+        self._notify_update()
 
     def turn_headlight_on(self):
         self.headlight_on = True
+        self._notify_update()
 
     def turn_headlight_off(self):
         self.headlight_on = False
+        self._notify_update()
 
     def switch_headlight(self):
         self.headlight_on = False if (self.headlight_on) else True
@@ -60,23 +102,16 @@ class DCCLocomotive(object):
     def slower(self):
         # Skip emergency stop
         if self.speed is 2:
-            self.set_speed(0)
+            self.speed = 0
         else:
-            self.set_speed(self.speed - 1)
+            self.speed = (self.speed - 1)
 
     def faster(self):
+        # Skip emergency stop
         if self.speed is 0:
-            self.set_speed(2)
+            self.speed = 2
         else:
-            self.set_speed(self.speed + 1)
-
-    def set_speed(self, speed):
-        # Make some basic checks
-        speed = abs(speed)
-        if self.headlight_support:
-            self.speed = min(15, speed)
-        else:
-            self.speed = min(31, speed)
+            self.speed = (self.speed + 1)
 
     def control_packet(self):
         factory = DCCBaselinePacketFactory
@@ -85,3 +120,11 @@ class DCCLocomotive(object):
                                                   self.headlight_on,
                                                   self.direction,
                                                   self.headlight_support)
+
+    def _notify_update(self):
+        """
+        Used by the DCC controller to generate a new set
+        of packets with updated information for the encoder
+        """
+        if self.notify_update_callback:
+            self.notify_update_callback(self.name)

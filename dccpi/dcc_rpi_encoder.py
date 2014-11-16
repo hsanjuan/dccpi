@@ -24,7 +24,11 @@ import operator
 
 class DCCRPiEncoder(DCCEncoder):
     """
-    Uses a C extension to send the packets quickly.
+    This encoder uses dcc_rpi_encoder_c extension to modify GPIO pins and
+    encode 0 and 1 bits according to DCC.
+
+    It also saves they payload as a string, as this is the format passed
+    to the extension, so it does not have to be rebuilt everytime.
     """
 
     def __init__(self,
@@ -33,23 +37,52 @@ class DCCRPiEncoder(DCCEncoder):
                  bit_one_part_duration=58,
                  bit_zero_part_min_duration=95,
                  bit_zero_part_max_duration=9900,
-                 bit_zero_part_duration=100):
+                 bit_zero_part_duration=100,
+                 packet_separation=5):
+        """
+        These arguments should be helpful in tweaking the outputs to better
+        fit the hardware or specific decoder requirements. I.e. if your
+        hardware shapes the signal on longer/shorter intervals than the
+        actual value, it can be adjusted here.
+
+        Currently only bit_X_part_duration and packet_separation are used.
+
+        Older decoders need a 5ms packet separation. Performance should improve
+        by making it 0 if working with new decoders.
+        """
+
         DCCEncoder.__init__(self,
                             bit_one_part_min_duration,
                             bit_one_part_max_duration,
                             bit_one_part_duration,
                             bit_zero_part_min_duration,
                             bit_zero_part_max_duration,
-                            bit_zero_part_duration)
+                            bit_zero_part_duration,
+                            packet_separation)
+
+        self._string_payload = ""
+
+    @property
+    def payload(self):
+        return self._payload
+
+    @payload.setter
+    def payload(self, packets):
+        self._payload = packets
+        bitstrings = map(operator.methodcaller('to_bit_string'),
+                         packets)
+        self._string_payload = ",".join(bitstrings)
 
     def send_packet(self, packet, times):
         packet_string = packet.to_bit_string()
-        return self.send_bit_string(packet_string, times)
+        return self.send_bit_string(packet_string + ",", times)
 
-    def send_packets(self, packets, times):
-        packet_string = "".join(map(operator.methodcaller('to_bit_string'),
-                                    packets))
-        return self.send_bit_string(packet_string, times)
+    def send_payload(self, times):
+        if len(self._string_payload):
+            self.send_bit_string(self._string_payload, times)
+            return True
+        else:
+            return False
 
     def send_bit_string(self, bit_string, times):
         """
@@ -62,4 +95,11 @@ class DCCRPiEncoder(DCCEncoder):
         return dcc_rpi_encoder_c.send_bit_array(bit_string,
                                                 times,
                                                 self.bit_one_part_duration,
-                                                self.bit_zero_part_duration)
+                                                self.bit_zero_part_duration,
+                                                self.packet_separation)
+
+    def tracks_power_on(self):
+        return dcc_rpi_encoder_c.brake(0)
+
+    def tracks_power_off(self):
+        return dcc_rpi_encoder_c.brake(1)

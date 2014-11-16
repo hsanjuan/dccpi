@@ -33,6 +33,7 @@ with a 18v booster circuit.
 Software requirements
 ---------------------
 
+  * Python 2.7 (Python 3 not yet supported)
   * wiringPi: download and install [wiringPi](http://wiringpi.com/download-and-install/)
   * Since wiringPi uses low-level mechanisms to access pins, dccpi programs **must be run as root**
 
@@ -54,9 +55,11 @@ There are 3 main componenents:
 
   * `DCCLocomotive`: represents a locomotive (device equipped with a DCC decoder). We can set speed, status of lights etc.
   * `DCCController`: represents the command station, that can be turned on/off. When it's on, it sends packets using a DCCEncoder.
-  * `DCCRPiEncoder`: it implements methods to actually send packets. The RPi encoder uses a c-extension based on WiringPi to do it. It should be easy to add other encoders (for example for different platforms than the RPi).
+  * `DCCRPiEncoder`: it implements methods to actually send packets. The RPi encoder uses a c-extension based on WiringPi to do it. It should be easy to add other encoders (for example for different platforms than the RPi or based on other extensions).
 
-The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) on BCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0. The booster is in charge of converting this signal into the DCC signal ranges (i.e. 18v to -18v)
+The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) on BCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0. The booster is in charge of converting this signal into the DCC signal ranges (i.e. 18v to -18v).
+
+The Raspberry Pi will also output a brake signal (HIGH) when the controller is stopped on BCM GPIO pin 27, which is Pysical Pin 13 (Model B+), which is wiringPi pin 2 (so next to the one above). This can be used to stop signal on the tracks (see booster schematics). Otherwise locos will receive DC current directly, and either burn or turn into DC mode (at full speed).
 
 See example below and read the code for more info.
 

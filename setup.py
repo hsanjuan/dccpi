@@ -21,15 +21,16 @@ from distutils.core import setup, Extension
 setup(
     name="dccpi",
     packages=["dccpi"],
-    version="1.0.0",
+    version="1.1.0",
     description="A Python NMRA DCC protocol implementation for RaspberryPi",
     author="Hector Sanjuan",
     author_email="hector@convivencial.org",
     url="https://github.com/hsanjuan/dccpi",
     download_url="",
     license="GNU General Public License v3 (GPLv3)",
-    keywords=["dcc", "nmra", "pi", "raspberry", "modelling",
-              "train", "decoder"],
+    keywords=["dcc", "nrma", "pi", "raspberry", "modelling",
+              "train", "decoder", "command", "station", "loco",
+              "locomotive"],
     install_requires=[
         'bitstring',
     ],
@@ -40,7 +41,6 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Development Status :: 4 - Beta",
         "Environment :: Plugins",
@@ -58,12 +58,10 @@ NRMA Digital Command Control (DCC) implementation for Raspberry Pi
 This module implements the DCC protocol for controlling model trains using a
 Raspberry Pi.
 
-It is able to output direction and speed DCC-encoded packets on one of the GPIO pins.
+It is able to output direction and speed DCC-encoded packets on one of the
+RPi GPIO pins. It needs WiringPi libraries to work.
 
-It is based on the:
- - `S-91 Electrical Standard <http://www.nmra.org/sites/default/files/standards/sandrp/pdf/s-9.1_electrical_standards_2006.pdf>`_
- - `S-92 DCC Communications Standard <http://www.nmra.org/sites/default/files/s-92-2004-07.pdf>`_
-
-Please visit the github page for more information: https://github.com/hsanjuan/dccpi.
+Please visit the github page for more information:
+https://github.com/hsanjuan/dccpi.
 """
 )

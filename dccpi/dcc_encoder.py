@@ -37,20 +37,38 @@ class DCCEncoder(object):
                  bit_one_part_duration=58,
                  bit_zero_part_min_duration=95,
                  bit_zero_part_max_duration=9900,
-                 bit_zero_part_duration=100):
+                 bit_zero_part_duration=100,
+                 packet_separation=0):
         self.bit_one_part_min_duration = bit_one_part_min_duration
         self.bit_one_part_max_duration = bit_one_part_max_duration
         self.bit_one_part_duration = bit_one_part_duration
         self.bit_zero_part_min_duration = bit_zero_part_min_duration
         self.bit_zero_part_max_duration = bit_zero_part_max_duration
         self.bit_zero_part_duration = bit_zero_part_duration
+        self.packet_separation = packet_separation
+
+        self._payload = []
+
+    @property
+    def payload(self):
+        return self._payload
+
+    @payload.setter
+    def payload(self, p):
+        self._payload = p
 
     def send_packet(self, packet, times):
         # to be implemented by subclass
         sys.stderr.write("send_packet() not implemented!")
         return False
 
-    def send_packets(self, packets, times):
+    def send_payload(self, times):
         # to be implemented by subclass
-        sys.stderr.write("send_packets() not implemented!")
+        sys.stderr.write("send_payload() not implemented!")
         return False
+
+    def tracks_power_on(self):
+        print "Tracks powered ON"
+
+    def tracks_power_off(self):
+        print "Tracks powered OFF"

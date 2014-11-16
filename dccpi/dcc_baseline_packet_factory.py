@@ -62,7 +62,7 @@ class DCCBaselinePacketFactory:
             instruction_bin.append(speed_bin)
         else:
             speed_bin = BitArray('uint:5=%d' % speed)
-            speed_bin.ror()
+            speed_bin.ror(1)
             instruction_bin.append(speed_bin)
 
         error = address_bin ^ instruction_bin
