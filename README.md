@@ -22,7 +22,7 @@ Hardware requirements
 
   * A Raspberry Pi (developed/tested on model B+)
   * DCC-decoder-equipped locomotives and tracks.
-  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks.
+  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks. Here is an example booster using [LMD18200 H-Bridge from TI](http://www.ti.com/product/LMD18200)
 
 ![Booster schematics](https://raw.githubusercontent.com/hsanjuan/dccpi/master/dcc_booster_schem.png)
 
@@ -56,7 +56,7 @@ There are 3 main componenents:
   * `DCCController`: represents the command station, that can be turned on/off. When it's on, it sends packets using a DCCEncoder.
   * `DCCRPiEncoder`: it implements methods to actually send packets. The RPi encoder uses a c-extension based on WiringPi to do it. It should be easy to add other encoders (for example for different platforms than the RPi).
 
-The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) on BCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0.
+The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) on BCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0. The booster is in charge of converting this signal into the DCC signal ranges (i.e. 18v to -18v)
 
 See example below and read the code for more info.
 
