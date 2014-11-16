@@ -21,8 +21,11 @@ Hardware requirements
 ---------------------
 
   * A Raspberry Pi (developed/tested on model B+)
-  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks (working on that).
   * DCC-decoder-equipped locomotives and tracks.
+  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks.
+
+![Booster schematics](https://raw.githubusercontent.com/hsanjuan/dccpi/master/dcc_booster_schem.png)
+
 
 `dccpi` should work on any common scale. DCC decoders take a wide range of voltage outputs (up to 24v). This has been tested on N-scale
 with a 18v booster circuit.
