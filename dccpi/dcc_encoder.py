@@ -18,6 +18,7 @@
 """
 
 import sys
+from dcc_packet_factory import DCCPacketFactory
 
 
 class DCCEncoder(object):
@@ -48,6 +49,9 @@ class DCCEncoder(object):
         self.packet_separation = packet_separation
 
         self._payload = []
+        self.idle_packet = DCCPacketFactory.idle_packet()
+        self.reset_packet = DCCPacketFactory.reset_packet()
+        self.stop_packet = DCCPacketFactory.stop_packet()
 
     @property
     def payload(self):
@@ -56,6 +60,15 @@ class DCCEncoder(object):
     @payload.setter
     def payload(self, p):
         self._payload = p
+
+    def send_idle(self, times):
+        self.send_packet(self.idle_packet, times)
+
+    def send_stop(self, times):
+        self.send_packet(self.stop_packet, times)
+
+    def send_reset(self, times):
+        self.send_packet(self.reset_packet, times)
 
     def send_packet(self, packet, times):
         # to be implemented by subclass

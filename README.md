@@ -12,20 +12,25 @@ It is based on the:
 Features
 --------
 
-  * Control DCC locomotives using Python
-  * Set speed, direction and lights
+  * Easy to install and use (minimal setup, no big framework)
+  * Easy to integrate as building block
+  * Works on multiple RPi operating systems
+  * Control DCC locomotives using plain Python!
+  * Set speed (14, 28, 128 speed steps) and direction
+  * Set FL (lights), F1-F4 functions
 
-Note dccpi does not yet implement any advanced features like decoder registry operations (i.e. set address).
+Note dccpi does not yet implement any advanced features like decoder registry operations (i.e. set address). I will work to extend it to my needs, which are not too fancy.
 
 Hardware requirements
 ---------------------
 
   * A Raspberry Pi (developed/tested on model B+)
   * DCC-decoder-equipped locomotives and tracks.
-  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks. Here is an example booster using [LMD18200 H-Bridge from TI](http://www.ti.com/product/LMD18200)
+  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks. Here is an example booster using [LMD18200 H-Bridge from TI](http://www.ti.com/product/LMD18200):
 
 ![Booster schematics](https://raw.githubusercontent.com/hsanjuan/dccpi/master/dcc_booster_schem.png)
 
+For a list of parts and some more info about this, see `booster_part_list.txt`.
 
 `dccpi` should work on any common scale. DCC decoders take a wide range of voltage outputs (up to 24v). This has been tested on N-scale
 with a 18v booster circuit.

@@ -21,53 +21,80 @@ from bitstring import BitArray
 from dcc_general_packet import DCCGeneralPacket
 
 
-class DCCBaselinePacketFactory:
+class DCCPacketFactory:
     """
-    Make it easy to build Baseline packages types
+    Make it easy to build packages types
     """
     @staticmethod
     def speed_and_direction_packet(address,
                                    speed,
-                                   headlight_on,
+                                   speed_steps,
                                    direction,
-                                   headlight_support=True):
+                                   headlight=False):
         """
         Build a speed and direction packet.
 
         param address int is the dcc device address.
-        param speed   int is the speed:
-            * 0 - Stop
-            * 1 - Stop (I) (headlights disabled)
-            * 2 - Emergency-Stop
-            * 3 - Emergency-Stop (I) (headlights disabled)
-            * 4..31 - Step 1..Step 28 or 1-14
-        param headlight_on bool decides if headlight is turned on when
-              supported
+        param speed   int is the speed. Depending on the
+                      speed steps we make a baseline packet
+                      or a 128-bit packet
         param direction int is 1 for forward and 0 for backwards.
-        param headlight_support decides if we use 16 or 32 speed steps
         """
         address_bin = BitArray('uint:8=%d' % address)
-        instruction_bin = BitArray('0b01')
-        if direction:
-            instruction_bin.append('0b1')
-        else:
-            instruction_bin.append('0b0')
 
-        if headlight_support:
-            if headlight_on:
+        if speed_steps == 128:
+            # Build a 2 byte advanced operation instruction
+            instruction_bin1 = BitArray('0b00111111')
+            instruction_bin2 = BitArray()
+            if direction:
+                instruction_bin2.append('0b1')
+            else:
+                instruction_bin2.append('0b0')
+            speed_bin = BitArray('uint:7=%d' % speed)
+            instruction_bin2.append(speed_bin)
+
+            error = address_bin ^ instruction_bin1 ^ instruction_bin2
+            data = [instruction_bin1, instruction_bin2, error]
+
+        else:
+            # Build a 1 byte direction and speed baseline packet
+            instruction_bin = BitArray('0b01')
+            if direction:
                 instruction_bin.append('0b1')
             else:
                 instruction_bin.append('0b0')
-            speed_bin = BitArray('uint:4=%d' % speed)
+            if speed_steps == 14:
+                if headlight:
+                    instruction_bin.append('0b1')
+                else:
+                    instruction_bin.append('0b0')
+                speed_bin = BitArray('uint:4=%d' % speed)
+            else:
+                speed_bin = BitArray('uint:5=%d' % speed)
+                speed_bin.ror(1)
+
             instruction_bin.append(speed_bin)
-        else:
-            speed_bin = BitArray('uint:5=%d' % speed)
-            speed_bin.ror(1)
-            instruction_bin.append(speed_bin)
+
+            error = address_bin ^ instruction_bin
+            data = [instruction_bin, error]
+
+        return DCCGeneralPacket(address_bin, data)
+
+    @staticmethod
+    def function_group_one_packet(address, fl, fl1, fl2, fl3, fl4):
+        address_bin = BitArray('uint:8=%d' % address)
+
+        functions = [fl, fl4, fl3, fl2, fl1]
+        instruction_bin = BitArray('0b100')
+        for f in functions:
+            if f:
+                instruction_bin.append('0b1')
+            else:
+                instruction_bin.append('0b0')
 
         error = address_bin ^ instruction_bin
-
         data = [instruction_bin, error]
+
         return DCCGeneralPacket(address_bin, data)
 
     @staticmethod

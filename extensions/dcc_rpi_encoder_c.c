@@ -60,7 +60,9 @@ static PyObject * dcc_rpi_encoder_c_send_bit_array(PyObject *self, PyObject *arg
                 // Interpret this case as packet end char.
                 // Standard says we should wait 5ms at least
                 // and 30ms max between packets.
+                digitalWrite(0, LOW);
                 delay(packet_separation); //ms
+                digitalWrite(0, HIGH);
             }
             bit_array_pos++;
         }

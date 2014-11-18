@@ -21,7 +21,7 @@ from distutils.core import setup, Extension
 setup(
     name="dccpi",
     packages=["dccpi"],
-    version="1.1.0",
+    version="1.2.0",
     description="A Python NMRA DCC protocol implementation for RaspberryPi",
     author="Hector Sanjuan",
     author_email="hector@convivencial.org",

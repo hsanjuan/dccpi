@@ -17,44 +17,87 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from dcc_baseline_packet_factory import DCCBaselinePacketFactory
+from dcc_packet_factory import DCCPacketFactory
+import sys
 
 
 class DCCLocomotive(object):
     """
-    A locomotive is a thing with speed, direction and lights
+    A locomotive can be understood as a decoder that
+    is able to understand speed and direction packets,
+    as well as function group one packets (for the moment)
     """
     def __init__(self,
                  name,
                  address,
                  speed=0,
+                 speed_steps=28,  # 14, 28, 128
                  direction=1,
-                 headlight_on=False,
-                 headlight_support=True):
-        self.name = name
-        self._address = address
-        self.direction = direction
-        self._headlight_on = headlight_on,
-        self.headlight_support = headlight_support
+                 fl=False,
+                 f1=False,
+                 f2=False,
+                 f3=False,
+                 f4=False):
 
         # We need a way to tell controller to update the payload
         # everytime we modify something
         # This will be set by the controller
         self.notify_update_callback = None
 
+        self.name = name
+        self._address = address
+        self.direction = direction
+        self._speed = 0
+
+        self.fl = fl  # light
+        self.f1 = f1
+        self.f2 = f2
+        self.f3 = f3
+        self.f4 = f4
+
+        self.speed_steps = speed_steps
         self.speed = speed
+
+    def __str__(self):
+        str = """
+DCC locomotive
+Name:               %s
+Address:            %i
+Speed:              %i
+Speed steps:        %i
+Direction:          %i
+FL, F1, F2, F3, F4: [%i %i %i %i %i]
+"""
+        return str % (self.name, self.address, self.speed, self.speed_steps,
+                      self.direction, self.fl, self.f1, self.f2,
+                      self.f3, self.f4)
+
+    def __repr__(self):
+        return self.__str__()
 
     def emergency_stop(self):
         self.speed = 1
-        self._notify_update()
 
     def stop(self):
         self.speed = 0
-        self._notify_update()
 
     def reverse(self):
         self.direction = 0 if (self.direction) else 1
         self._notify_update()
+
+    @property
+    def speed_steps(self):
+        return self._speed_steps
+
+    @speed_steps.setter
+    def speed_steps(self, ss):
+        if int(ss) in [14, 28, 128]:
+            self._speed_steps = int(ss)
+        else:
+            m = "Speed steps must be 14, 28 or 128. We have set it to 28\n"
+            sys.stderr.write(m)
+            self._speed_steps = 28
+        self.speed = self.speed  # This notifies update and puts speed in bounds
 
     @property
     def speed(self):
@@ -64,19 +107,72 @@ class DCCLocomotive(object):
     def speed(self, speed):
         # Make some basic checks
         speed = abs(speed)
-        if self.headlight_support:
+        if self.speed_steps == 14:
             self._speed = min(15, speed)
-        else:
+        elif self.speed_steps == 28:
             self._speed = min(31, speed)
+        elif self.speed_steps == 128:
+            self._speed = min(127, speed)
         self._notify_update()
 
     @property
-    def headlight_on(self):
-        return self._headlight_on
+    def fl(self):
+        return self._fl
 
-    @headlight_on.setter
-    def headlight_on(self, x):
-        self._headlight_on = x
+    @fl.setter
+    def fl(self, x):
+        if x:
+            self._fl = True
+        else:
+            self._fl = False
+        self._notify_update()
+
+    @property
+    def f1(self):
+        return self._f1
+
+    @f1.setter
+    def f1(self, x):
+        if x:
+            self._f1 = True
+        else:
+            self._f1 = False
+        self._notify_update()
+
+    @property
+    def f2(self):
+        return self._f2
+
+    @f2.setter
+    def f2(self, x):
+        if x:
+            self._f2 = True
+        else:
+            self._f2 = False
+        self._notify_update()
+
+    @property
+    def f3(self):
+        return self._f3
+
+    @f3.setter
+    def f3(self, x):
+        if x:
+            self._f3 = True
+        else:
+            self._f3 = False
+        self._notify_update()
+
+    @property
+    def f4(self):
+        return self._f4
+
+    @f4.setter
+    def f4(self, x):
+        if x:
+            self._f4 = True
+        else:
+            self._f4 = False
         self._notify_update()
 
     @property
@@ -88,16 +184,8 @@ class DCCLocomotive(object):
         self._address = ad
         self._notify_update()
 
-    def turn_headlight_on(self):
-        self.headlight_on = True
-        self._notify_update()
-
-    def turn_headlight_off(self):
-        self.headlight_on = False
-        self._notify_update()
-
     def switch_headlight(self):
-        self.headlight_on = False if (self.headlight_on) else True
+        self.fl = False if (self.fl) else True
 
     def slower(self):
         # Skip emergency stop
@@ -113,13 +201,24 @@ class DCCLocomotive(object):
         else:
             self.speed = (self.speed + 1)
 
-    def control_packet(self):
-        factory = DCCBaselinePacketFactory
-        return factory.speed_and_direction_packet(self.address,
-                                                  self.speed,
-                                                  self.headlight_on,
-                                                  self.direction,
-                                                  self.headlight_support)
+    def control_packets(self):
+        factory = DCCPacketFactory
+        speed_packet = factory.speed_and_direction_packet(
+            self.address,
+            self.speed,
+            self.speed_steps,
+            self.direction,
+            self.fl)
+
+        function_group_one_packet = factory.function_group_one_packet(
+            self.address,
+            self.fl,
+            self.f1,
+            self.f2,
+            self.f3,
+            self.f4)
+
+        return [speed_packet, function_group_one_packet]
 
     def _notify_update(self):
         """

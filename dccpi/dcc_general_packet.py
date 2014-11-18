@@ -30,7 +30,8 @@ class DCCGeneralPacket(object):
         """
         All arguments simle binary/hex strings: 0xFF 0b2121
         """
-        self.preamble = BitArray('0b111111111111')
+        # A command station must send a minimum of 14 preamble bits
+        self.preamble = BitArray('0b1111111111111111')
         self.packet_start_bit = BitArray('0b0')
         self.address_byte = BitArray(address_byte)
         self.data_byte_start_bit = BitArray('0b0')
@@ -81,14 +82,5 @@ class DCCGeneralPacket(object):
         """
         Allow some debuging
         """
-        if len(self.data_bytes) > 2:
-            return "Device #%d: %s" % (self.address_byte.uint,
-                                       " ".join(map(str, self.data_bytes)))
-        else:  # Assume this is a baseline packet
-            string = "Device #%d: Dir->%d, HL->%d, Speed->%d"
-            instruction = self.data_bytes[0]
-            direction = instruction[2:3].uint
-            headlight = instruction[3:4].uint
-            speed = instruction[4:8].uint
-            return string % (self.address_byte.uint,
-                             direction, headlight, speed)
+        return "Device #%d: %s" % (self.address_byte.uint,
+                                   " ".join(map(str, self.data_bytes)))

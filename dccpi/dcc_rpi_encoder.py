@@ -61,6 +61,9 @@ class DCCRPiEncoder(DCCEncoder):
                             packet_separation)
 
         self._string_payload = ""
+        self._idle_packet_string = self.idle_packet.to_bit_string()
+        self._reset_packet_string = self.reset_packet.to_bit_string()
+        self._stop_packet_string = self.stop_packet.to_bit_string()
 
     @property
     def payload(self):
@@ -76,6 +79,15 @@ class DCCRPiEncoder(DCCEncoder):
     def send_packet(self, packet, times):
         packet_string = packet.to_bit_string()
         return self.send_bit_string(packet_string + ",", times)
+
+    def send_idle(self, times):
+        self.send_bit_string(self._idle_packet_string, times)
+
+    def send_stop(self, times):
+        self.send_bit_string(self._stop_packet_string, times)
+
+    def send_reset(self, times):
+        self.send_bit_string(self._reset_packet_string, times)
 
     def send_payload(self, times):
         if len(self._string_payload):
