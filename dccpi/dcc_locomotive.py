@@ -97,7 +97,7 @@ FL, F1, F2, F3, F4: [%i %i %i %i %i]
             m = "Speed steps must be 14, 28 or 128. We have set it to 28\n"
             sys.stderr.write(m)
             self._speed_steps = 28
-        self.speed = self.speed  # This notifies update and puts speed in bounds
+        self.speed = self.speed  # This notifies update
 
     @property
     def speed(self):

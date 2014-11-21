@@ -20,7 +20,6 @@
 import time
 import threading
 import sys
-from dcc_packet_factory import DCCPacketFactory
 
 
 class DCCController(object):
@@ -48,7 +47,7 @@ class DCCController(object):
     def __repr__(self):
         str = "DCC Controller:\n"
         str += "-----------------------------"
-        for n,device in self.devices.iteritems():
+        for n, device in self.devices.iteritems():
             str += device.__repr__()
             str += "-----------------------------"
         return str
@@ -150,7 +149,7 @@ class DCCControllerThread(threading.Thread):
                     self.dcc_encoder.tracks_power_off()
                     break
                 elif state is 'newpayload':
-                    result = self.dcc_encoder.send_payload(2)
+                    self.dcc_encoder.send_payload(2)
                     self.dcc_controller.state = 'idle'
                     idle_count = 0
                 else:
@@ -160,5 +159,6 @@ class DCCControllerThread(threading.Thread):
                 time.sleep(0.015)
         except:
             self.dcc_encoder.tracks_power_off()
-            sys.stderr.write("An exception ocurred! Please stop the controller!")
+            m = "An exception ocurred! Please stop the controller!"
+            sys.stderr.write(m)
             raise
