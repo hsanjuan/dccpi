@@ -12,9 +12,16 @@ It is based on the:
 Features
 --------
 
-  * Easy to install and use (minimal setup, no big framework)
+> You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.
+
+> Joe Armstrong
+
+`dccpi` is a minimal implementation which aims to offer the minimal support to control some trains and be easy to integrate in other projects. It is not a support-all, complex, multi-protocol, ui-included, buy-my-hardware solution. For this, there are better solutions like [RocRail](http://wiki.rocrail.net/doku.php), [JMRI](http://jmri.sourceforge.net/), [SPROG](http://www.sprog-dcc.co.uk/), [GertBot](http://www.gertbot.com/) etc.
+
+
+  * Easy to install and use (pip module, minimal setup, no big framework)
   * Easy to integrate as building block
-  * Works on multiple RPi operating systems
+  * Should works on multiple RPi operating systems
   * Control DCC locomotives using plain Python!
   * Set speed (14, 28, 128 speed steps) and direction
   * Set FL (lights), F1-F4 functions
@@ -26,14 +33,13 @@ Hardware requirements
 
   * A Raspberry Pi (developed/tested on model B+)
   * DCC-decoder-equipped locomotives and tracks.
-  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks. Here is an example booster using [LMD18200 H-Bridge from TI](http://www.ti.com/product/LMD18200):
+  * The Raspberry Pi needs an additional booster circuit to actually provide the signal to the tracks which you can build yourself. Here is an example booster using [LMD18200 H-Bridge from TI](http://www.ti.com/product/LMD18200):
 
 ![Booster schematics](https://raw.githubusercontent.com/hsanjuan/dccpi/master/dcc_booster_schem.png)
 
 For a list of parts and some more info about this, see `booster_part_list.txt`.
 
-`dccpi` should work on any common scale. DCC decoders take a wide range of voltage outputs (up to 24v). This has been tested on N-scale
-with a 18v booster circuit.
+`dccpi` should work on any common scale. DCC decoders take a wide range of voltage outputs (up to 24v). This has been tested on N-scale with a 18v booster circuit.
 
 Software requirements
 ---------------------
@@ -64,7 +70,7 @@ There are 3 main componenents:
 
 The Raspberry Pi will output the signal (which goes from 0v-Low to 3.3v-High) on BCM GPIO pin 17, which is Physical Pin 11 (Model B+), which is wiringPi pin 0. The booster is in charge of converting this signal into the DCC signal ranges (i.e. 18v to -18v).
 
-The Raspberry Pi will also output a brake signal (HIGH) when the controller is stopped on BCM GPIO pin 27, which is Pysical Pin 13 (Model B+), which is wiringPi pin 2 (so next to the one above). This can be used to stop signal on the tracks (see booster schematics). Otherwise locos will receive DC current directly, and either burn or turn into DC mode (at full speed).
+The Raspberry Pi will also output a brake signal (HIGH) when the controller is stopped on BCM GPIO pin 27, which is Pysical Pin 13 (Model B+), which is wiringPi pin 2 (so next to the one above). This can be used to stop signal on the tracks if your booster supports it (see booster schematics). Otherwise locos will receive DC current directly, and either burn or turn into DC mode (at full speed).
 
 See example below and read the code for more info.
 
