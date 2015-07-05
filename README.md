@@ -44,8 +44,8 @@ For a list of parts and some more info about this, see `booster_part_list.txt`.
 Software requirements
 ---------------------
 
-  * Python 2.7-dev (Python 3 not yet supported.  Raspian does not include -dev version, must be installed to use Python.h)
-  * Python Bitstring [details](https://pypi.python.org/pypi/bitstring/3.1.3)
+  * Python 2.7 (Python 3 not yet supported, Raspian does not include -dev version, must be installed to use Python.h)
+  * Python Bitstring [details](https://pypi.python.org/pypi/bitstring/3.1.3). Should be auto-fetched when installing with pip.
   * wiringPi: download and install [wiringPi](http://wiringpi.com/download-and-install/)
   * Since wiringPi uses low-level mechanisms to access pins, dccpi programs **must be run as root**
 
@@ -79,27 +79,27 @@ Example
 -------
     >>> from dccpi import *
     >>> e = DCCRPiEncoder()
-    >>> c = DCCController(e)           # Create the DCC controller with the RPi encoder
-    >>> l1 = DCCLocomotive("DCC6", 6)  # Create locos, args ("Name",DCC_Address) (see DCCLocomotive class)
+    >>> controller = DCCController(e)  # Create the DCC controller with the RPi encoder
+    >>> l1 = DCCLocomotive("DCC6", 6)  # Create locos, args: Name, DCC Address (see DCCLocomotive class)
     >>> l2 = DCCLocomotive("DCC7", 7)
     >>> l3 = DCCLocomotive("DCC8", 8)
-    >>> DCCController.register(c,l1)   # Register locos on the 'c' controller
+    >>> controller.register(l1)        # Register locos on the controller
     DCC6 registered on address #6
-    >>> DCCController.register(c,l2)
+    >>> controller.register(l2)
     DCC7 registered on address #7
-    >>> DCCController.register(c,l3)
+    >>> controller.register(l3)
     DCC8 registered on address #8
-    >>> DCCController.start(c)        # Start 'c' controller. Remove brake signal
-    Starting DCC Controller           # and starts sending bits to the booster
-    >>> l1.reverse()                  # Change direction bit
-    >>> l2.fl = True                  # Change fl function bit
+    >>> controller.start()             # Start 'c' controller. Remove brake signal
+    Starting DCC Controller            # and starts sending bits to the booster
+    >>> l1.reverse()                   # Change direction bit
+    >>> l2.fl = True                   # Change fl function bit
     >>> l3.fl = True
-    >>> l1.speed = 10                 # Change speed
+    >>> l1.speed = 10                  # Change speed
     >>> l2.speed = 18
     >>> l3.speed = 23
-    >>> l3.slower()                   # Reduce 1 speed step
-    >>> l3.faster()                   # Increase 1 speed step
-    >>> l1                            # Print loco information
+    >>> l3.slower()                    # Reduce 1 speed step
+    >>> l3.faster()                    # Increase 1 speed step
+    >>> l1                             # Print loco information
 
     DCC locomotive
     Name:               my
@@ -109,7 +109,7 @@ Example
     Direction:          0
     FL, F1, F2, F3, F4: [0 0 0 0 0]
 
-    >>> DCCController(c)              # Print info from all locos registered
+    >>> controller              # Print info from all locos registered
     DCC Controller:
     -----------------------------
     DCC locomotive
@@ -137,7 +137,7 @@ Example
     FL, F1, F2, F3, F4: [0 0 0 0 0]
     -----------------------------
 
-    >>> DCCController.stop(c)       # IMPORTANT! Stop controller always. Emergency-stops
+    >>> controller.stop()           # IMPORTANT! Stop controller always. Emergency-stops
     DCC Controller stopped          # all locos and enables brake signal on tracks
 
 Example with dummy encoder
