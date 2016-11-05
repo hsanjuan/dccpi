@@ -37,6 +37,7 @@ class DCCController(object):
         """
         self.dcc_encoder = dcc_encoder
         self._state = 'idle'
+        self._abort = False
         self.devices = {}
         self._thread = None
         self.devices_lock = threading.Lock()
@@ -95,11 +96,16 @@ class DCCController(object):
         for name, device in self.devices.items():
             packets += device.control_packets()
 
+        # FIXME: Thread unsafe! What if we write while reading?
         self.dcc_encoder.payload = packets
         # t1 = time.clock()
         # print("DCC payload updated (in %f seconds)" % (t1 - t0))
-        if self._thread:
-            self.state = 'newpayload'
+
+        # The state machine will come to the new payload state
+        # eventually
+        #if self._thread:
+        #    # FIXME: Thread unsafe! While if we write while writing?
+        #self.state = 'newpayload'
 
     def start(self):
         if self._thread:
@@ -107,11 +113,12 @@ class DCCController(object):
             return None
         print("Starting DCC Controller")
         self._thread = DCCControllerThread(self)
+        self._abort = False
         self.state = 'startup'
         self._thread.start()
 
     def stop(self):
-        self.state = 'shutdown'
+        self._abort = True
         if self._thread:
             self._thread.join()
             self._thread = None
@@ -137,17 +144,23 @@ class DCCControllerThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        # We can play a bunch of variables here:
+        # How many payload packets do we send?
+        # How many idle packages do we send?
+        # How long do we sleep? We NEED to sleep because otherwise
+        # the thread becomes very unresponsive
         try:
             idle_count = 0
             while(True):
                 state = self.dcc_controller.state
+                abort = self.dcc_controller._abort
+                if abort:
+                    state = 'shutdown'
+
                 if state is 'idle':
                     self.dcc_encoder.send_idle(1)
                     idle_count += 1
-                    if idle_count >= 250:
-                        # Resending the payload causes some
-                        # flickering in the lights, but we have
-                        # to in case the loco didn't get it
+                    if idle_count >= 2:
                         self.dcc_controller.state = 'newpayload'
                 elif state is 'startup':
                     self.dcc_encoder.tracks_power_on()
@@ -159,14 +172,14 @@ class DCCControllerThread(threading.Thread):
                     self.dcc_encoder.tracks_power_off()
                     break
                 elif state is 'newpayload':
-                    self.dcc_encoder.send_payload(2)
+                    self.dcc_encoder.send_payload(20)
                     self.dcc_controller.state = 'idle'
                     idle_count = 0
                 else:
                     sys.stderr.write("Unknown state %s!" % state)
                     self.dcc_controller.state = 'shutdown'
 
-                time.sleep(0.010)
+                time.sleep(0.008)
         except:
             self.dcc_encoder.tracks_power_off()
             m = "An exception ocurred! Please stop the controller!"
