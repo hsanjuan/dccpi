@@ -27,7 +27,7 @@ Features
 
 > Joe Armstrong
 
-`dccpi` is a minimal implementation which aims to offer the minimal support to control some trains and be easy to integrate in other projects. It is not a support-all, complex, multi-protocol, ui-included, buy-my-hardware solution. For this, there are better solutions like [RocRail](http://wiki.rocrail.net/doku.php), [JMRI](http://jmri.sourceforge.net/), [SPROG](http://www.sprog-dcc.co.uk/), [GertBot](http://www.gertbot.com/) etc.
+`dccpi` is a minimal implementation which aims to offer support to control some trains and be easy to integrate in other projects. It is not a support-all, complex, multi-protocol, ui-included, buy-my-hardware solution. For this, there are better solutions like [RocRail](http://wiki.rocrail.net/doku.php), [JMRI](http://jmri.sourceforge.net/), [SPROG](http://www.sprog-dcc.co.uk/), [GertBot](http://www.gertbot.com/) etc.
 
 
   * Easy to install and use (pip module, minimal setup, no big framework)
@@ -70,10 +70,10 @@ Note that the circuit in the pictures includes an additional 5V DC converter (th
 Software requirements
 ---------------------
 
-  * Python 2.7 (Python 3 not yet supported, Raspian does not include -dev version, must be installed to use Python.h)
-  * Python Bitstring [details](https://pypi.python.org/pypi/bitstring/3.1.3). Should be auto-fetched when installing with pip.
-  * wiringPi: download and install [wiringPi](http://wiringpi.com/download-and-install/)
-  * Since wiringPi uses low-level mechanisms to access pins, dccpi programs **must be run as root**
+  * Python 2.7/Python 3
+  * `bitstring` module [details](https://pypi.python.org/pypi/bitstring/3.1.3). Should be auto-fetched when installing with pip.
+  * `wiringPi`: download and install [wiringPi](http://wiringpi.com/download-and-install/)
+  * Since `wiringPi` uses low-level mechanisms to access pins, dccpi programs **must be run as root**
 
 Installation
 ------------
@@ -103,6 +103,9 @@ See example below and read the code for more info.
 
 Example
 -------
+
+Note that `dccpi` programs must be run as root, or `wiringPi` will complain.
+
 
 ```
 from dccpi import *
