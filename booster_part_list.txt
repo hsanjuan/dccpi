@@ -4,7 +4,7 @@ sure there's a hundred ways of improving it, but it's what I had in hand.
 I recommend to soldier it, but you can also plug it to a breadboard.
 
 The H-Bridge comes in TO-220 11 PIN package, which sucks for prototyping,
-so you will need to cable it separately.
+so you will need to wire it separately.
 
 Components can probably be obtained at cheaper prices in different stores. 
 The DC Barrel Jack Adapter is used to re-use the 18V DC converter I got 
@@ -13,8 +13,8 @@ can in theory be reduced to cheaper 1200µF.
 
 ---------------------------------------------------------------------------
 1x 1µF Ceramic Capacitor 50Vdc ±20% , Multilayer       [€0,66]
-   Conrad: http://www.conrad.com/ce/en/product/453382
-1x Electrolytic capacitor 4700 µF 35 V 20 %            [€2,39]
+   Conrad: http://www.conrad.com/ce/en/product/453382 
+1x Electrolytic capacitor 4700 µF 35 V 20 %           [€2,39]
    Conrad: http://www.conrad.com/ce/en/product/441958
 2x 10nF Ceramic Capacitor 50Vdc % 5mm Holystone        [€0,16]
    Conrad: http://www.conrad.com/ce/en/product/531889
