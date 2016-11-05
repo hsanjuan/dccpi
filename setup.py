@@ -17,7 +17,7 @@
     along with "dccpi".  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 setup(
     name="dccpi",
     packages=["dccpi"],
