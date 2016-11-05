@@ -1,5 +1,5 @@
 """
-    Copyright (C) 2014  Hector Sanjuan
+    Copyright (C) 2016  Hector Sanjuan
 
     This file is part of "dccpi".
 

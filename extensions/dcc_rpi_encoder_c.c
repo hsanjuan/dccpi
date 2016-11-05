@@ -2,7 +2,7 @@
     dcc_rpi_encoder_c.c - Uses wiringPI delayMicrosecondsHard() to
     generate a DCC protocol signal.
 
-    Copyright (C) 2014  Hector Sanjuan
+    Copyright (C) 2016  Hector Sanjuan
 
     This file is part of "dccpi".
 
