@@ -160,7 +160,7 @@ class DCCControllerThread(threading.Thread):
                 if state is 'idle':
                     self.dcc_encoder.send_idle(1)
                     idle_count += 1
-                    if idle_count >= 2:
+                    if idle_count >= 1: # Disable idles for the moment
                         self.dcc_controller.state = 'newpayload'
                 elif state is 'startup':
                     self.dcc_encoder.tracks_power_on()
@@ -172,7 +172,7 @@ class DCCControllerThread(threading.Thread):
                     self.dcc_encoder.tracks_power_off()
                     break
                 elif state is 'newpayload':
-                    self.dcc_encoder.send_payload(20)
+                    self.dcc_encoder.send_payload(15)
                     self.dcc_controller.state = 'idle'
                     idle_count = 0
                 else:
