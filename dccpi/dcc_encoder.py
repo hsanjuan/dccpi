@@ -18,7 +18,7 @@
 """
 
 import sys
-from dcc_packet_factory import DCCPacketFactory
+from .dcc_packet_factory import DCCPacketFactory
 
 
 class DCCEncoder(object):
@@ -81,7 +81,7 @@ class DCCEncoder(object):
         return False
 
     def tracks_power_on(self):
-        print "Tracks powered ON"
+        print("Tracks powered ON")
 
     def tracks_power_off(self):
-        print "Tracks powered OFF"
+        print("Tracks powered OFF")

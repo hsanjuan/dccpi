@@ -92,10 +92,47 @@ static PyMethodDef DCCRPiEncoderMethods[] = {
     {NULL, NULL, 0, NULL} /* Sentinel - whatever that means */
 };
 
-PyMODINIT_FUNC initdcc_rpi_encoder_c(void){
+
+#if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "dcc_rpi_encoder_c",  /* m_name */
+    NULL,                 /* m_doc */
+    -1,                   /* m_size */
+    DCCRPiEncoderMethods, /* m_methods */
+    NULL,                 /* m_reload */
+    NULL,                 /* m_traverse */
+    NULL,                 /* m_clear */
+    NULL,                 /* m_free */
+  };
+#endif
+
+static PyObject * moduleinit(void){
+    PyObject *m;
+
     wiringPiSetup();
     pinMode(0, OUTPUT);
     pinMode(2, OUTPUT);
     digitalWrite(2, HIGH); //Brake
-    Py_InitModule("dcc_rpi_encoder_c", DCCRPiEncoderMethods);
+
+#if PY_MAJOR_VERSION >= 3
+    m = PyModule_Create(&moduledef);
+#else
+    m = Py_InitModule("dcc_rpi_encoder_c", DCCRPiEncoderMethods);
+#endif
+
+    if (m == NULL)
+        return NULL;
+
+    return m;
 }
+
+#if PY_MAJOR_VERSION < 3
+    PyMODINIT_FUNC initdcc_rpi_encoder_c(void){
+        moduleinit();
+    }
+#else
+    PyMODINIT_FUNC PyInit_dcc_rpi_encoder_c(void){
+        return moduleinit();
+    }
+#endif

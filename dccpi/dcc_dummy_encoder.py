@@ -17,7 +17,7 @@
     along with "dccpi".  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from dcc_encoder import DCCEncoder
+from .dcc_encoder import DCCEncoder
 import time
 
 
@@ -35,17 +35,17 @@ class DCCDummyEncoder(DCCEncoder):
         DCCEncoder.__init__(self)
 
     def send_packet(self, packet, times):
-        print packet
-        print "(%d times...)" % times
+        print(packet)
+        print("(%d times...)" % times)
         time.sleep(self.SLEEP_BETWEEN_BATCHES)
         return True
 
     def send_payload(self, times):
         if not len(self.payload):
             return False
-        print "----"
+        print("----")
         for p in self.payload:
-            print p
-        print "---- (%d times...)" % times
+            print(p)
+        print("---- (%d times...)" % times)
         time.sleep(self.SLEEP_BETWEEN_BATCHES)
         return True

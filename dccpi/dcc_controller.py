@@ -47,7 +47,11 @@ class DCCController(object):
     def __repr__(self):
         str = "DCC Controller:\n"
         str += "-----------------------------"
-        for n, device in self.devices.iteritems():
+        if sys.version_info.major < 3:
+            items = self.devices.iteritems()
+        else:
+            items = self.devices.items()
+        for n, device in items:
             str += device.__repr__()
             str += "-----------------------------"
         return str
@@ -82,7 +86,13 @@ class DCCController(object):
     def update_payload(self, device_name='*'):
         # t0 = time.clock()
         packets = []
-        for name, device in self.devices.iteritems():
+
+        if sys.version_info.major < 3:
+            items = self.devices.iteritems()
+        else:
+            items = self.devices.items()
+
+        for name, device in self.devices.items():
             packets += device.control_packets()
 
         self.dcc_encoder.payload = packets
@@ -156,7 +166,7 @@ class DCCControllerThread(threading.Thread):
                     sys.stderr.write("Unknown state %s!" % state)
                     self.dcc_controller.state = 'shutdown'
 
-                time.sleep(0.015)
+                time.sleep(0.010)
         except:
             self.dcc_encoder.tracks_power_off()
             m = "An exception ocurred! Please stop the controller!"

@@ -17,7 +17,7 @@
     along with "dccpi".  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from dcc_encoder import DCCEncoder
+from .dcc_encoder import DCCEncoder
 import dcc_rpi_encoder_c
 import operator
 

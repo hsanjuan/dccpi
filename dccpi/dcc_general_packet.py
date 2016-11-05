@@ -17,6 +17,7 @@
     along with "dccpi".  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import sys
 from bitstring import BitArray
 
 
@@ -36,6 +37,8 @@ class DCCGeneralPacket(object):
         self.address_byte = BitArray(address_byte)
         self.data_byte_start_bit = BitArray('0b0')
         self.data_bytes = map(BitArray, data_bytes)
+        if sys.version_info.major >= 3:
+            self.data_bytes = list(self.data_bytes)
         self.packet_end_bit = BitArray('0b1')
 
         assert(len(self.address_byte) == 8)

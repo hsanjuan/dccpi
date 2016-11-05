@@ -24,7 +24,7 @@ setup(
     version="1.2.0",
     description="A Python NMRA DCC protocol implementation for RaspberryPi",
     author="Hector Sanjuan",
-    author_email="hector@convivencial.org",
+    author_email="code@hector.link",
     url="https://github.com/hsanjuan/dccpi",
     download_url="",
     license="GNU General Public License v3 (GPLv3)",
@@ -40,7 +40,8 @@ setup(
                   libraries=['wiringPi'])
     ],
     classifiers=[
-        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3"
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Development Status :: 4 - Beta",
         "Environment :: Plugins",
