@@ -61,6 +61,7 @@ These are the parts:
   * [2x 10nF Ceramic Capacitor 50Vdc % 5mm Holystone](http://www.conrad.com/ce/en/product/531889)
   * [1x DC Barrel Jack Adapter Breadboard Compatible](http://www.exp-tech.de/dc-barrel-jack-adapter-breadboard-compatible)
   * [1x LMD18200T/NOPB Texas Instruments](http://www.ti.com/product/LMD18200/samplebuy)
+  * 1x10kΩ + 1x3.3kΩ resistors (both optional)
 
 Here is an image composed of 5 pictures of how my actual working prototype looks like: [prototype.jpg](prototype.jpg)
 
