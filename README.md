@@ -9,6 +9,8 @@ It is based on the:
   * [S-91 Electrical Standard](http://www.nmra.org/sites/default/files/standards/sandrp/pdf/s-9.1_electrical_standards_2006.pdf)
   * [S-92 DCC Communications Standard](http://www.nmra.org/sites/default/files/s-92-2004-07.pdf)
 
+**Attention**: Python is too slow and barely gets the job done (and thanks to a C-extension). Therefore I have decided to re-implement `dccpi` in Go: https://github.com/hsanjuan/go-dcc . The Go implementation gives an overall better user experience and it is easier to install/run.
+
 Index
 -----
 
