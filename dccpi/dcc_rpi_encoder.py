@@ -59,7 +59,7 @@ class DCCRPiEncoder(DCCEncoder):
                             bit_zero_part_max_duration,
                             bit_zero_part_duration,
                             packet_separation)
-
+        dcc_rpi_encoder_c.setup()
         self._string_payload = ""
         self._idle_packet_string = self.idle_packet.to_bit_string()
         self._reset_packet_string = self.reset_packet.to_bit_string()

@@ -25,6 +25,10 @@
 //This one is not exposed
 extern void delayMicrosecondsHard (unsigned int howLong);
 
+// pin numbering follows wiringPi notation
+const int dataPin = 0;
+const int brakePin = 2;
+
 static PyObject * dcc_rpi_encoder_c_send_bit_array(PyObject *self, PyObject *args){
     char const *bit_array;
     char const *bit_array_pos;
@@ -45,24 +49,24 @@ static PyObject * dcc_rpi_encoder_c_send_bit_array(PyObject *self, PyObject *arg
         while (*bit_array_pos){ //string will be null terminated
             if (*bit_array_pos == '0'){
                 //Encode 0 with 100us for each part
-                digitalWrite(0, LOW);
+                digitalWrite(dataPin, LOW);
                 delayMicrosecondsHard(bit_zero_part_duration);
-                digitalWrite(0, HIGH);
+                digitalWrite(dataPin, HIGH);
                 delayMicrosecondsHard(bit_zero_part_duration);
             }
             else if (*bit_array_pos == '1'){
                 //Encode 1 with 58us for each part
-                digitalWrite(0, LOW);
+                digitalWrite(dataPin, LOW);
                 delayMicrosecondsHard(bit_one_part_duration);
-                digitalWrite(0, HIGH);
+                digitalWrite(dataPin, HIGH);
                 delayMicrosecondsHard(bit_one_part_duration);
             } else {
                 // Interpret this case as packet end char.
                 // Standard says we should wait 5ms at least
                 // and 30ms max between packets.
-                digitalWrite(0, LOW);
+                digitalWrite(dataPin, LOW);
                 delay(packet_separation); //ms
-                digitalWrite(0, HIGH);
+                digitalWrite(dataPin, HIGH);
             }
             bit_array_pos++;
         }
@@ -77,9 +81,18 @@ static PyObject * dcc_rpi_encoder_c_brake(PyObject *self, PyObject *args){
         return NULL;
 
     if (brake == 0)
-        digitalWrite(2, LOW);
+        digitalWrite(brakePin, LOW);
     else
-        digitalWrite(2, HIGH);
+        digitalWrite(brakePin, HIGH);
+
+    Py_RETURN_NONE;
+}
+
+static PyObject * dcc_rpi_encoder_c_setup(PyObject *self, PyObject *args){
+    wiringPiSetup();
+    pinMode(dataPin, OUTPUT);
+    pinMode(brakePin, OUTPUT);
+    digitalWrite(brakePin, HIGH); //Brake
 
     Py_RETURN_NONE;
 }
@@ -89,6 +102,8 @@ static PyMethodDef DCCRPiEncoderMethods[] = {
      "Send some bits to the tracks"},
     {"brake", dcc_rpi_encoder_c_brake, METH_VARARGS,
      "Enable or disable a brake signal"},
+    {"setup", dcc_rpi_encoder_c_setup, METH_VARARGS,
+     "setup wiringPi and the default pins"},
     {NULL, NULL, 0, NULL} /* Sentinel - whatever that means */
 };
 
@@ -109,11 +124,6 @@ static PyMethodDef DCCRPiEncoderMethods[] = {
 
 static PyObject * moduleinit(void){
     PyObject *m;
-
-    wiringPiSetup();
-    pinMode(0, OUTPUT);
-    pinMode(2, OUTPUT);
-    digitalWrite(2, HIGH); //Brake
 
 #if PY_MAJOR_VERSION >= 3
     m = PyModule_Create(&moduledef);
