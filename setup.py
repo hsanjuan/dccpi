@@ -21,7 +21,7 @@ from setuptools import setup, Extension
 setup(
     name="dccpi",
     packages=["dccpi"],
-    version="1.3.0",
+    version="1.3.1",
     description="A Python NMRA DCC protocol implementation for RaspberryPi",
     author="Hector Sanjuan",
     author_email="code@hector.link",
